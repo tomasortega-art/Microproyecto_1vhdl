@@ -1,4 +1,4 @@
-Library IEEE;
+ibrary IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity divisor_1Hz is
@@ -29,4 +29,4 @@ begin
         end if;
     end process;
     clk_out <= clk_estado;
-end Behavioral;
+end Behavioral;l
