@@ -1,0 +1,32 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity divisor_1Hz is
+    Port (
+        clk_in  : in  STD_LOGIC;
+        reset   : in  STD_LOGIC;
+        clk_out : out STD_LOGIC
+    );
+end divisor_1Hz;
+
+architecture Behavioral of divisor_1Hz is
+    constant MAX_COUNT : integer := 25000000; -- Ajustable a la frecuencia de reloj de tarjeta (50 MHz)
+    signal count : integer range 0 to MAX_COUNT := 0;
+    signal clk_estado : STD_LOGIC := '0';
+begin
+    process(clk_in, reset)
+    begin
+        if reset = '1' then
+            count <= 0;
+            clk_estado <= '0';
+        elsif rising_edge(clk_in) then
+            if count = MAX_COUNT - 1 then
+                count <= 0;
+                clk_estado <= not clk_estado;
+            else
+                count <= count + 1;
+            end if;
+        end if;
+    end process;
+    clk_out <= clk_estado;
+end Behavioral;
