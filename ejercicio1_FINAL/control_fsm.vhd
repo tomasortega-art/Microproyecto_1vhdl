@@ -16,11 +16,9 @@ entity control_fsm is
 end entity control_fsm;
 
 architecture Comportamental of control_fsm is
-    type estado_type is (IDLE, TEMPO_35S, SOBRETIEMPO, FELICITACION);
+    type estado_type is (IDLE, TEMPO_35S, RESET_EXTRA, SOBRETIEMPO, FELICITACION);
     signal estado_act, estado_sig : estado_type;
 begin
-
-    -- Registro de estado
     process(clk, reset)
     begin
         if reset = '1' then
@@ -30,10 +28,8 @@ begin
         end if;
     end process;
 
-    -- Lógica de próximo estado y salidas
     process(estado_act, sensor_presencia, fin_35s)
     begin
-        -- Valores por defecto
         rst_contador     <= '0';
         ena_contador     <= '0';
         modo_extra       <= '0';
@@ -53,25 +49,28 @@ begin
                 if sensor_presencia = '0' then
                     estado_sig <= FELICITACION;
                 elsif fin_35s = '1' then
-                    rst_contador <= '1'; -- Reinicia contador para medir sobretiempo desde 0
-                    estado_sig   <= SOBRETIEMPO;
+                    estado_sig <= RESET_EXTRA; 
                 end if;
+                
+            when RESET_EXTRA =>
+                rst_contador <= '1';
+                estado_sig   <= SOBRETIEMPO; 
 
             when SOBRETIEMPO =>
                 ena_contador <= '1';
                 modo_extra   <= '1';
-                led_alarma   <= '1';
+                led_alarma   <= '1'; 
                 if sensor_presencia = '0' then
                     estado_sig <= IDLE;
                 end if;
 
             when FELICITACION =>
-                led_felicitacion <= '1';
-                rst_contador     <= '1';
-                if sensor_presencia = '0' then
-                    estado_sig <= IDLE;
+                led_felicitacion <= '1'; 
+                rst_contador     <= '1'; 
+                
+                if sensor_presencia = '1' then
+                    estado_sig <= TEMPO_35S;
                 end if;
         end case;
     end process;
-
 end architecture Comportamental;

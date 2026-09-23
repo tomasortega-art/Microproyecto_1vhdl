@@ -21,22 +21,19 @@ begin
     begin
         if reset = '1' then
             cuenta  <= 0;
-            fin_35s <= '0';
         elsif rising_edge(clk) then
             if rst_contador = '1' then
                 cuenta  <= 0;
-                fin_35s <= '0';
             elsif ena_contador = '1' and tick_1s = '1' then
-                if cuenta = 34 then
-                    cuenta  <= 35;
-                    fin_35s <= '1';
-                elsif cuenta < 99 then
-                    cuenta  <= cuenta + 1;
-                    fin_35s <= '0';
+                if cuenta < 99 then
+                    cuenta <= cuenta + 1;
                 end if;
             end if;
         end if;
     end process;
 
     cuenta_out <= cuenta;
+    -- Señal puramente combinacional: es '1' en cuanto llega a 35
+    fin_35s <= '1' when cuenta >= 35 else '0'; 
+
 end architecture Comportamental;
