@@ -7,9 +7,8 @@ entity top_ejercicio3 is
     );
     port (
         clk_fpga             : in  std_logic;
-        btn_master_reset     : in  std_logic;
-        btn_start_stop_reset : in  std_logic;
-        led_corriendo        : out std_logic; -- Salida de diagnóstico
+        btn_master_reset     : in  std_logic; -- Reset maestro (ej. SW0)
+        btn_start_stop_reset : in  std_logic; -- Botón multifunción (ej. BUTTON0 o KEY0)
         hex0_suni            : out std_logic_vector(6 downto 0);
         hex1_sdec            : out std_logic_vector(6 downto 0);
         hex2_min             : out std_logic_vector(6 downto 0)
@@ -33,7 +32,6 @@ architecture Estructural of top_ejercicio3 is
             reset_global : in  std_logic;
             tick_1s      : in  std_logic;
             btn_in       : in  std_logic;
-            corriendo_out: out std_logic;
             min_out      : out integer range 0 to 9;
             sec_out      : out integer range 0 to 59
         );
@@ -56,6 +54,7 @@ architecture Estructural of top_ejercicio3 is
 
 begin
 
+    -- Adaptación para pulsadores físicos (KEY0/BUTTON0) que trabajan en Lógica Invertida (Active-LOW):
     s_btn_in <= not btn_start_stop_reset;
 
     U_DIVISOR: divisor_frecuencia
@@ -68,13 +67,12 @@ begin
 
     U_CONTROL: control_timer_v3
         port map (
-            clk           => clk_fpga,
-            reset_global  => btn_master_reset,
-            tick_1s       => s_tick_1s,
-            btn_in        => s_btn_in,
-            corriendo_out => led_corriendo,
-            min_out       => s_minutos,
-            sec_out       => s_segundos
+            clk          => clk_fpga,
+            reset_global => btn_master_reset,
+            tick_1s      => s_tick_1s,
+            btn_in       => s_btn_in,
+            min_out      => s_minutos,
+            sec_out      => s_segundos
         );
 
     U_DECODER: decodificador_timer

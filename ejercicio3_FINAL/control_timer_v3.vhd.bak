@@ -4,13 +4,12 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity control_timer_v3 is
     port (
-        clk           : in  std_logic;
-        reset_global  : in  std_logic;
-        tick_1s       : in  std_logic;
-        btn_in        : in  std_logic; -- Botón activo en '1'
-        corriendo_out : out std_logic; -- Salida para el LED indicador
-        min_out       : out integer range 0 to 9;
-        sec_out       : out integer range 0 to 59
+        clk          : in  std_logic;
+        reset_global : in  std_logic;
+        tick_1s      : in  std_logic;
+        btn_in       : in  std_logic; -- Botón activo en '1' (tras adaptación)
+        min_out      : out integer range 0 to 9;
+        sec_out      : out integer range 0 to 59
     );
 end entity control_timer_v3;
 
@@ -28,9 +27,6 @@ architecture Comportamental of control_timer_v3 is
     signal req_reset   : std_logic := '0';
 
 begin
-
-    -- Asignación concurrente (AQUÍ DEBE IR, DESPUÉS DEL BEGIN)
-    corriendo_out <= corriendo;
 
     -- Proceso 1: Detección de duración de pulsación (Corta < 2s / Larga >= 2s)
     process(clk, reset_global)
@@ -57,11 +53,13 @@ begin
                             if contador_2s < 2 then
                                 contador_2s <= contador_2s + 1;
                             else
+                                -- Cumplió los 2 segundos presionado
                                 req_reset  <= '1';
                                 estado_btn <= ESPERA_SOLTAR;
                             end if;
                         end if;
                     else
+                        -- Se soltó antes de 2s -> Pulsación corta (Start/Stop)
                         req_toggle <= '1';
                         estado_btn <= IDLE;
                     end if;
@@ -87,7 +85,7 @@ begin
                 minutos   <= 0;
                 segundos  <= 0;
             elsif req_toggle = '1' then
-                corriendo <= not corriendo;
+                corriendo <= not corriendo; -- Alterna Arranque / Parada
             end if;
 
             if corriendo = '1' and tick_1s = '1' and req_reset = '0' then

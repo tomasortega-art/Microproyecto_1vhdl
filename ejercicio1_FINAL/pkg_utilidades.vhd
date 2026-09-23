@@ -19,7 +19,7 @@ package body pkg_utilidades is
             when 2 => seg := "0100100";
             when 3 => seg := "0110000";
             when 4 => seg := "0011001";
-            when 5 => seg := "0100010";
+            when 5 => seg := "0010010"; -- CORREGIDO: f='0' (encendido), e='1' (apagado)
             when 6 => seg := "0000010";
             when 7 => seg := "1111000";
             when 8 => seg := "0000000";
