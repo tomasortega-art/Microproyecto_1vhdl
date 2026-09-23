@@ -1,0 +1,7 @@
+esta aclaracion tiene el fin de especificar que en el desarrollo del microproyecto1 se obtuvieron
+varias fallas logicas en los ejercicios denomiados como Ejercicio_123_intento_1
+que la final fueron corregidas en otros archivos por aparte pero dejados en la misma carpeta de Microproyecto_1 
+como prueba del proceso seguido para la solucion de los ejercicios 1,2 y 3.
+
+en los ejercicios  ejercicio123_FINALES es donde se encuentra toda la logica tras el funcionamiento de
+dichos circuitos en la FPGA.
