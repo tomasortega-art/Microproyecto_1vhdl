@@ -17,7 +17,7 @@ package body pkg_utilidades is
             when 1 => seg := "1111001"; -- b,c encendidos
             when 2 => seg := "0100100"; -- a,b,d,e,g encendidos
             when 3 => seg := "0110000"; -- a,b,c,d,g encendidos
-            when 4 => seg := "0011001"; -- b,c,f,g encendidos	
+            when 4 => seg := "0011001"; -- b,c,f,g encendidos
             when 5 => seg := "0010010"; -- a,c,d,f,g encendidos (CORREGIDO)
             when 6 => seg := "0000010"; -- a,c,d,e,f,g encendidos
             when 7 => seg := "1111000"; -- a,b,c encendidos
